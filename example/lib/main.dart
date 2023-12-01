@@ -41,8 +41,7 @@ class _HomePageState extends State<HomePage> {
         child: CupertinoButton.filled(
             child: const Text('Enter new page'),
             onPressed: () {
-              Navigator.push(context,
-                  CupertinoPageRoute(builder: (c) => const SwipeActionPage()));
+              Navigator.push(context, CupertinoPageRoute(builder: (c) => const SwipeActionPage()));
             }),
       ),
     );
@@ -76,10 +75,8 @@ class _SwipeActionPageState extends State<SwipeActionPage> {
   @override
   void initState() {
     super.initState();
-    controller = SwipeActionController(selectedIndexPathsChangeCallback:
-        (changedIndexPaths, selected, currentCount) {
-      print(
-          'cell at ${changedIndexPaths.toString()} is/are ${selected ? 'selected' : 'unselected'} ,current selected count is $currentCount');
+    controller = SwipeActionController(selectedIndexPathsChangeCallback: (changedIndexPaths, selected, currentCount) {
+      print('cell at ${changedIndexPaths.toString()} is/are ${selected ? 'selected' : 'unselected'} ,current selected count is $currentCount');
 
       /// I just call setState() to update simply in this example.
       /// But the whole page will be rebuilt.
@@ -103,8 +100,7 @@ class _SwipeActionPageState extends State<SwipeActionPage> {
                   padding: const EdgeInsets.only(),
                   child: const Text('open cell at 2'),
                   onPressed: () {
-                    controller.openCellAt(
-                        index: 2, trailing: true, animated: true);
+                    controller.openCellAt(index: 2, trailing: true, animated: true);
                   }),
             ),
             const SizedBox(
@@ -139,9 +135,7 @@ class _SwipeActionPageState extends State<SwipeActionPage> {
         leading: CupertinoButton.filled(
             padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
             minSize: 0,
-            child: Text(
-                'delete cells (${controller.getSelectedIndexPaths().length})',
-                style: const TextStyle(color: Colors.white)),
+            child: Text('delete cells (${controller.getSelectedIndexPaths().length})', style: const TextStyle(color: Colors.white)),
             onPressed: () {
               /// 获取选取的索引集合
               List<int> selectedIndexes = controller.getSelectedIndexPaths();
@@ -181,51 +175,51 @@ class _SwipeActionPageState extends State<SwipeActionPage> {
   }
 
   Widget _item(BuildContext ctx, int index) {
-    return SwipeActionCell(
-      controller: controller,
-      index: index,
-
-      // Required!
-      key: ValueKey(list[index]),
-
-      // Animation default value below
-      // deleteAnimationDuration: 400,
-      selectedForegroundColor: Colors.black.withAlpha(30),
-      trailingActions: [
-        SwipeAction(
-            title: "delete",
-            performsFirstActionWithFullSwipe: true,
-            nestedAction: SwipeNestedAction(title: "confirm"),
-            onTap: (handler) async {
-              await handler(true);
-
-              list.removeAt(index);
-              setState(() {});
-            }),
-        SwipeAction(title: "action2", color: Colors.grey, onTap: (handler) {}),
-      ],
-      leadingActions: [
-        SwipeAction(
-            title: "delete",
-            onTap: (handler) async {
-              await handler(true);
-              list.removeAt(index);
-              setState(() {});
-            }),
-        SwipeAction(
-            title: "action3", color: Colors.orange, onTap: (handler) {}),
-      ],
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context, CupertinoPageRoute(builder: (ctx) => const HomePage()));
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Text("This is index of ${list[index]}",
-              style: const TextStyle(fontSize: 30)),
+    return Stack(
+      children: [
+        Container(
+          color: Colors.green,
+          child: Image.network(
+              'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg'),
         ),
-      ),
+        SwipeActionCell(
+          controller: controller,
+          index: index,
+backgroundColor: Colors.transparent,
+          // Required!
+          key: ValueKey(list[index]),
+
+          // Animation default value below
+          // deleteAnimationDuration: 400,
+          selectedForegroundColor: Colors.black.withAlpha(30),
+          trailingActions: [
+            SwipeAction(
+                title: "delete",
+                performsFirstActionWithFullSwipe: true,
+                forceAlignmentToBoundary: true,
+                nestedAction: SwipeNestedAction(title: "confirm"),
+                color: Colors.transparent,
+                onTap: (handler) async {
+                  await handler(false);
+
+                  setState(() {});
+                }),
+          ],
+firstActionWillCoverAllSpaceOnDeleting: true,
+          child: Container(
+            color: Colors.white,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context, CupertinoPageRoute(builder: (ctx) => const HomePage()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text("This is index of ${list[index]}", style: const TextStyle(fontSize: 30)),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

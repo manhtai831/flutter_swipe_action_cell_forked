@@ -209,7 +209,8 @@ class _SwipePullAlignButtonState extends State<SwipePullAlignButton>
             widthFillActionContentController!.value)!;
         setState(() {});
       });
-    widthFillActionContentController?.forward();
+      print(_animToCoverPullActionContent);
+    // widthFillActionContentController?.forward();
   }
 
   @override
