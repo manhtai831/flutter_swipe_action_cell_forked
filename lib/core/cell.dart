@@ -7,11 +7,15 @@ import 'package:flutter/services.dart';
 import 'controller.dart';
 import 'events.dart';
 import 'store.dart';
+import 'swipe_data.dart';
+import 'swipe_pull_align_button.dart';
+import 'swipe_pull_button.dart';
 
 ///
 /// @created by 文景睿
 /// 2020 年 7月13日
 ///
+typedef WidgetBuilder = Widget Function(double dX);
 
 class SwipeActionCell extends StatefulWidget {
   /// Actions on trailing
@@ -119,6 +123,9 @@ class SwipeActionCell extends StatefulWidget {
   final bool? canDragToLeft;
   final bool? canDragToRight;
   final double? maxWidthAnimation;
+  final WidgetBuilder? trailingBuilder;
+  final WidgetBuilder? leadingBuilder;
+
 
   /// ## About [key] / 关于[key]
   /// You should put a key,like [ValueKey] or [ObjectKey]
@@ -136,6 +143,7 @@ class SwipeActionCell extends StatefulWidget {
     this.trailingActions,
     this.maxWidthAnimation,
     this.afterResetAnimation,
+    this.trailingBuilder,this.leadingBuilder,
     this.canDragToLeft,
     this.canDragToRight,
     this.leadingActions,
@@ -551,37 +559,37 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
   void _onHorizontalDragEnd(DragEndDetails details) async {
     if (editing) return;
 
-    final bool canFullSwipe = leadingActionsCount > 0 && widget.leadingActions![0].performsFirstActionWithFullSwipe ||
-        trailingActionsCount > 0 && widget.trailingActions![0].performsFirstActionWithFullSwipe;
+    // final bool canFullSwipe = leadingActionsCount > 0 && widget.leadingActions![0].performsFirstActionWithFullSwipe ||
+    //     trailingActionsCount > 0 && widget.trailingActions![0].performsFirstActionWithFullSwipe;
 
-    if (lastItemOut && canFullSwipe) {
-      CompletionHandler completionHandler = (delete) async {
-        if (delete) {
-          SwipeActionStore.getInstance().bus.fire(IgnorePointerEvent(ignore: true));
-          if (widget.firstActionWillCoverAllSpaceOnDeleting) {
-            SwipeActionStore.getInstance().bus.fire(PullLastButtonToCoverCellEvent(key: widget.key!));
-          }
+    // if (lastItemOut && canFullSwipe) {
+    //   CompletionHandler completionHandler = (delete) async {
+    //     if (delete) {
+    //       SwipeActionStore.getInstance().bus.fire(IgnorePointerEvent(ignore: true));
+    //       if (widget.firstActionWillCoverAllSpaceOnDeleting) {
+    //         SwipeActionStore.getInstance().bus.fire(PullLastButtonToCoverCellEvent(key: widget.key!));
+    //       }
 
-          /// wait animation to complete
-          await deleteWithAnim();
-        } else {
-          lastItemOut = false;
-          _closeNestedAction();
+    //       /// wait animation to complete
+    //       await deleteWithAnim();
+    //     } else {
+    //       lastItemOut = false;
+    //       _closeNestedAction();
 
-          /// wait animation to complete
-          await closeWithAnim();
-          await widget.doneAnimation?.call();
-          resetWithAni();
-          widget.afterResetAnimation?.call();
-        }
-      };
+    //       /// wait animation to complete
+    //       await closeWithAnim();
+    //       await widget.doneAnimation?.call();
+    //       resetWithAni();
+    //       widget.afterResetAnimation?.call();
+    //     }
+    //   };
 
-      if (whenTrailingActionShowing && widget.trailingActions != null) {
-        widget.trailingActions?[0].onTap(completionHandler);
-      } else if (whenLeadingActionShowing && widget.leadingActions != null) {
-        widget.leadingActions?[0].onTap(completionHandler);
-      }
-    } else {
+    //   if (whenTrailingActionShowing && widget.trailingActions != null) {
+    //     widget.trailingActions?[0].onTap(completionHandler);
+    //   } else if (whenLeadingActionShowing && widget.leadingActions != null) {
+    //     widget.leadingActions?[0].onTap(completionHandler);
+    //   }
+    // } else {
       /// normal dragging update
       // if (details.velocity.pixelsPerSecond.dx < 0.0) {
       //   if (!whenLeadingActionShowing && hasTrailingAction) {
@@ -623,7 +631,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
       if (trailingActionsCount == 1 || leadingActionsCount == 1) {
         SwipeActionStore.getInstance().bus.fire(PullLastButtonEvent(isPullingOut: false));
       }
-    }
+    // }
   }
 
   /// When nestedAction is open ,adjust currentOffset if nestedWidth > currentOffset
@@ -819,11 +827,101 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   width = constraints.maxWidth;
-                  return content;
+                   final bool shouldHideActionButtons =
+                      currentOffset.dx == 0.0 || editController.isAnimating || editing;
+                  final Widget trailing = shouldHideActionButtons
+                      ? const SizedBox()
+                      : _buildTrailingActionButtons();
+
+                  final Widget leading = shouldHideActionButtons
+                      ? const SizedBox()
+                      : _buildLeadingActionButtons();
+                 return Stack(
+                    alignment: Alignment.centerLeft,
+                    children: <Widget>[
+                       trailing,
+                      leading,
+                      content,
+                     
+                    ],
+                  );
                 },
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLeadingActionButtons() {
+    if (currentOffset.dx < 0 || !hasLeadingAction) {
+      return const SizedBox();
+    }
+    final List<Widget> actionButtons =
+        List.generate(leadingActionsCount, (index) {
+      final actualIndex = leadingActionsCount - 1 - index;
+      if (widget.leadingActions!.length == 1 &&
+          !widget.leadingActions![0].forceAlignmentToBoundary &&
+          widget.leadingActions![0].performsFirstActionWithFullSwipe) {
+        return SwipePullAlignButton(actionIndex: actualIndex, trailing: false);
+      } else {
+        return SwipePullButton(actionIndex: actualIndex, trailing: false);
+      }
+    });
+
+    return SwipeData(
+      willPull: lastItemOut &&
+          widget.leadingActions![0].performsFirstActionWithFullSwipe,
+      firstActionWillCoverAllSpaceOnDeleting:
+          widget.firstActionWillCoverAllSpaceOnDeleting,
+      parentKey: widget.key!,
+      totalActionWidth: maxLeadingPullWidth,
+      actions: widget.leadingActions!,
+      contentWidth: width,
+      currentOffset: currentOffset.dx,
+      fullDraggable: widget.leadingActions![0].performsFirstActionWithFullSwipe,
+      parentState: this,
+      child: Positioned.fill(
+        child: Stack(
+          children: actionButtons,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTrailingActionButtons() {
+    if (currentOffset.dx > 0 || !hasTrailingAction) {
+      return const SizedBox();
+    }
+    final List<Widget> actionButtons =
+        List.generate(trailingActionsCount, (index) {
+      final actualIndex = trailingActionsCount - 1 - index;
+      if (trailingActionsCount == 1 &&
+          !widget.trailingActions![0].forceAlignmentToBoundary &&
+          widget.trailingActions![0].performsFirstActionWithFullSwipe) {
+        return SwipePullAlignButton(actionIndex: actualIndex, trailing: true);
+      } else {
+        return SwipePullButton(actionIndex: actualIndex, trailing: true);
+      }
+    });
+
+    return SwipeData(
+      willPull: lastItemOut &&
+          widget.trailingActions![0].performsFirstActionWithFullSwipe,
+      firstActionWillCoverAllSpaceOnDeleting:
+          widget.firstActionWillCoverAllSpaceOnDeleting,
+      parentKey: widget.key!,
+      totalActionWidth: maxTrailingPullWidth,
+      actions: widget.trailingActions!,
+      contentWidth: width,
+      currentOffset: currentOffset.dx,
+      fullDraggable:
+          widget.trailingActions![0].performsFirstActionWithFullSwipe,
+      parentState: this,
+      child: Positioned.fill(
+        child: Stack(
+          children: actionButtons,
         ),
       ),
     );

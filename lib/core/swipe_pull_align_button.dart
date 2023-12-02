@@ -239,21 +239,17 @@ class _SwipePullAlignButtonState extends State<SwipePullAlignButton>
         }
         action.onTap.call(handler);
       },
-      child: Transform.translate(
-        offset: Offset((trailing ? 1 : -1) * data.contentWidth + offsetX, 0),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(action.backgroundRadius),
-            color: action.color,
-          ),
-          child: Align(
-            alignment: trailing ? Alignment.centerLeft : Alignment.centerRight,
-            child: Container(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              alignment: alignment,
-              width: offsetX.abs(),
-              child: _buildButtonContent(shouldShowNestedActionInfo),
-            ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(action.backgroundRadius),
+          color: action.color,
+        ),
+        child: Align(
+          alignment: trailing ? Alignment.centerLeft : Alignment.centerRight,
+          child: Container(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            alignment: trailing ? Alignment.centerRight : Alignment.centerLeft,
+            child: _buildButtonContent(shouldShowNestedActionInfo),
           ),
         ),
       ),

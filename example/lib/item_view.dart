@@ -41,16 +41,10 @@ class _ItemViewState extends State<ItemView> with TickerProviderStateMixin {
     double width = MediaQuery.of(context).size.width;
     return Stack(
       children: [
-        Container(
-          width: width,
-          height: 80,
-          decoration: BoxDecoration(color: Colors.red),
-          child: Row(
-            children: [
-              Expanded(child: Text('Texxt nay hienj ra khi sur dung cu chi')),
-              Spacer(),
-              Expanded(child: Text('Texxt nay hienj ra khi sur dung cu chi')),
-            ],
+        Positioned.fill(
+          child: Container(
+            width: width,
+            decoration: BoxDecoration(color: Colors.red),
           ),
         ),
         FadeTransition(
@@ -75,8 +69,25 @@ class _ItemViewState extends State<ItemView> with TickerProviderStateMixin {
           key: ValueKey(widget.item),
           doneAnimation: onDoneAnimation,
           afterResetAnimation: onResetAnimation,
-          trailingActions: [SwipeAction(onTap: (v) {}, performsFirstActionWithFullSwipe: true)],
-          leadingActions: [SwipeAction(onTap: (v) {}, performsFirstActionWithFullSwipe: true)],
+          trailingActions: [
+            SwipeAction(
+              onTap: (v) {},
+              performsFirstActionWithFullSwipe: true,
+              content: SizedBox(
+                width: 112,
+                child: Text('this content show when use gesture',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
+              ),
+            )
+          ],
+          leadingActions: [
+            SwipeAction(
+                onTap: (v) {},
+                performsFirstActionWithFullSwipe: true,
+                content: SizedBox(
+                  width: 112,
+                  child: Text('this content show when use gesture',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white)),
+                ))
+          ],
           child: Container(
             color: Colors.white,
             child: GestureDetector(

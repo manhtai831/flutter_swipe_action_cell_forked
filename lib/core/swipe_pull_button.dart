@@ -272,23 +272,16 @@ class _SwipePullButtonState extends State<SwipePullButton>
         }
         action.onTap.call(handler);
       },
-      child: Transform.translate(
-        offset: Offset((trailing ? 1 : -1) * data.contentWidth + offsetX, 0),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(action.backgroundRadius),
-            color: action.color,
-          ),
-          child: Align(
-            alignment: trailing ? Alignment.centerLeft : Alignment.centerRight,
-            child: Container(
-                alignment: Alignment.center,
-                width: shouldShowNestedActionInfo
-                    ? offsetX.abs()
-                    : action.widthSpace,
-                child: _buildButtonContent(shouldShowNestedActionInfo)),
-          ),
-        ),
+      child: Align(
+        alignment: trailing ? Alignment.centerLeft : Alignment.centerRight,
+        child: Container(
+          
+            alignment: Alignment.center,
+            width: double.infinity,
+            //  shouldShowNestedActionInfo
+            //     ? offsetX.abs()
+            //     : action.widthSpace,
+            child: _buildButtonContent(shouldShowNestedActionInfo)),
       ),
     );
   }
