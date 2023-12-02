@@ -1,11 +1,11 @@
- # flutter_swipe_action_cell
+ # flutter_swipe_action_cell_forked
  一个强大的列表项侧滑库
 
 ### 如果你喜欢这个库，不要吝啬你的star😀，这个项目的star越多，说明这个库越受欢迎，使用的人越多，我也就会花更多的时间在这个库上。
  
  ### Language: 
- [English](https://github.com/luckysmg/flutter_swipe_action_cell/blob/master/README.md)
- | [中文简体](https://github.com/luckysmg/flutter_swipe_action_cell/blob/master/README-CN.md)
+ [English](https://github.com/luckysmg/flutter_swipe_action_cell_forked/blob/master/README.md)
+ | [中文简体](https://github.com/luckysmg/flutter_swipe_action_cell_forked/blob/master/README-CN.md)
  
  <br/>
  
@@ -19,14 +19,14 @@
 
 Alipay | Wechat | 
 -------- | -----
-<img src="https://raw.githubusercontent.com/luckysmg/daily_images/main/flutter_swipe_action_cell_images/alipay.JPG?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/wechat.JPG?raw=true" width="250"  alt=""/>
+<img src="https://raw.githubusercontent.com/luckysmg/daily_images/main/flutter_swipe_action_cell_forked_images/alipay.JPG?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/wechat.JPG?raw=true" width="250"  alt=""/>
 
 ## 直接进入正题:
 
-#### pub 仓库点这里： [pub](https://pub.dev/packages/flutter_swipe_action_cell)
+#### pub 仓库点这里： [pub](https://pub.dev/packages/flutter_swipe_action_cell_forked)
 #### 安装：
 ```yaml
-flutter_swipe_action_cell: ^3.1.3
+flutter_swipe_action_cell_forked: ^3.1.3
 ```
 
  <br/>
@@ -36,30 +36,30 @@ flutter_swipe_action_cell: ^3.1.3
 
 简单删除 | 拉满执行第一个action | 
 -------- | -----
- <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/1.gif?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/2.gif?raw=true" width="250"  alt=""/>
+ <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/1.gif?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/2.gif?raw=true" width="250"  alt=""/>
 
 
 伴随动画删除 | 多于一个action的样式 | 
 -------- | -----
- <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/3.gif?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/4.gif?raw=true" width="250"  alt=""/>
+ <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/3.gif?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/4.gif?raw=true" width="250"  alt=""/>
 
 仿微信确认删除交互 | 仿微信确认删除自动调整按钮大小 
 -------- | -------- 
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/6.gif?raw=true" width="250"  alt=""/>|<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/7.gif?raw=true" width="250"  alt=""/>|
+<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/6.gif?raw=true" width="250"  alt=""/>|<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/7.gif?raw=true" width="250"  alt=""/>|
 
 仿微信收藏页 自定义按钮形状交互 | 
 -------- |
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/9.gif?raw=true" width="300"  alt=""/>
+<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/9.gif?raw=true" width="300"  alt=""/>
 
 支持左侧按钮和右侧的按钮 | 
 -------- |
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/10.gif?raw=true" width="300"  alt=""/> |
+<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/10.gif?raw=true" width="300"  alt=""/> |
 
 
 
 编辑模式 (GIF 较大） | 
 -------- |
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/8.gif?raw=true" width="200"  alt=""/>|
+<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/8.gif?raw=true" width="200"  alt=""/>|
 
 
 ###  目前已经实现的内容 ：
@@ -78,7 +78,7 @@ flutter_swipe_action_cell: ^3.1.3
 
 ## 最完整的例子（几乎涵盖所有常用api）:
 [完整效果预览 （西瓜视频）](https://v.ixigua.com/JAqWvNM/)
-你可以点击 [example page](https://pub.dev/packages/flutter_swipe_action_cell/example) 来看实现full example的完整代码
+你可以点击 [example page](https://pub.dev/packages/flutter_swipe_action_cell_forked/example) 来看实现full example的完整代码
 
 <br/>
 
@@ -86,7 +86,7 @@ flutter_swipe_action_cell: ^3.1.3
 
  - ## Example 1:最简单的例子---删除
  
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/1.gif?raw=true" width="300"  alt=""/>
+<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/1.gif?raw=true" width="300"  alt=""/>
 
  - ##### Tip：你把下面的放在你ListView的itemBuilder里面返回就行
 ```dart
@@ -113,7 +113,7 @@ flutter_swipe_action_cell: ^3.1.3
  
  - ## Example 2:拉满将会执行第一个action
  
- <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/2.gif?raw=true" width="300"  alt=""/>
+ <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/2.gif?raw=true" width="300"  alt=""/>
 
  ```dart
  SwipeActionCell(
@@ -139,7 +139,7 @@ flutter_swipe_action_cell: ^3.1.3
 
  - ## Example 3:伴随动画的删除（按照iOS原生动画做的）
  
- <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/3.gif?raw=true" width="300"  alt=""/>
+ <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/3.gif?raw=true" width="300"  alt=""/>
  
  ```dart
 SwipeActionCell(
@@ -168,7 +168,7 @@ SwipeActionCell(
 
  - ## Example 4:多于一个action
  
- <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/4.gif?raw=true" width="200"  alt=""/>
+ <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/4.gif?raw=true" width="200"  alt=""/>
 
  
  ```dart
@@ -219,7 +219,7 @@ SwipeActionCell(
  ```
 
 - ## Example 5：仿微信iOS端消息删除效果
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/6.gif?raw=true" width="300"  alt=""/>
+<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/6.gif?raw=true" width="300"  alt=""/>
 
 ```dart
 return SwipeActionCell(
@@ -255,7 +255,7 @@ return SwipeActionCell(
 
 
 - ## Example 6：编辑模式（类似iOS原生效果）
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/8.gif?raw=true" width="300"  alt=""/>
+<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/8.gif?raw=true" width="300"  alt=""/>
 
 ```dart
 /// 控制器（目前就是控制编辑的）
@@ -325,7 +325,7 @@ ListView.builder(
 
  - ## Example 7：仿美团iOS端订单页删除效果
  
- <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/5.gif?raw=true" width="250"  alt=""/>
+ <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/5.gif?raw=true" width="250"  alt=""/>
 
  #### 根据gif图可以判断，删除逻辑应该是这样的：
  - 1.点击或者拉动到最后触发删除动作
@@ -371,7 +371,7 @@ Widget _item(int index) {
 
 - ## Example 8：仿微信ios端收藏列表效果（自定义形状按钮）
 
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_images/9.gif?raw=true" width="250"  alt=""/>
+<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/9.gif?raw=true" width="250"  alt=""/>
 
 ```dart
 
