@@ -117,6 +117,11 @@ class SwipeActionCell extends StatefulWidget {
   /// 关闭动画的曲线
   final Curve closeAnimationCurve;
 
+  final Future<void> Function()? doneAnimation;
+  final Future<void> Function()? afterResetAnimation;
+  final bool? canDragToLeft;
+  final bool? canDragToRight;
+
   /// ## About [key] / 关于[key]
   /// You should put a key,like [ValueKey] or [ObjectKey]
   /// don't use [GlobalKey] or [UniqueKey]
@@ -131,7 +136,11 @@ class SwipeActionCell extends StatefulWidget {
     required Key key,
     required this.child,
     this.trailingActions,
+    this.afterResetAnimation,
+    this.canDragToLeft,
+    this.canDragToRight,
     this.leadingActions,
+    this.doneAnimation,
     this.isDraggable = true,
     this.closeWhenScrolling = true,
     this.firstActionWillCoverAllSpaceOnDeleting = true,
@@ -180,7 +189,6 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
   late Animation<double> closeCurvedAnim;
   late Animation<double> deleteCurvedAnim;
   late Animation<double> editCurvedAnim;
-  late Animation<double> opacityCurvedAnim;
 
   ScrollPosition? scrollPosition;
 
@@ -239,7 +247,6 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
     closeCurvedAnim = CurvedAnimation(parent: controller, curve: widget.closeAnimationCurve);
     deleteCurvedAnim = CurvedAnimation(parent: deleteController, curve: Curves.easeInToLinear);
     editCurvedAnim = CurvedAnimation(parent: editController, curve: Curves.linear);
-    opacityCurvedAnim = CurvedAnimation(parent: controller, curve: Curves.linear);
     _listenEvent();
   }
 
@@ -564,6 +571,9 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
 
           /// wait animation to complete
           await closeWithAnim();
+          await widget.doneAnimation?.call();
+          resetWithAni();
+          widget.afterResetAnimation?.call();
         }
       };
 
@@ -592,13 +602,19 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
 
       if (whenTrailingActionShowing) {
         if (-currentOffset.dx > width * .3) {
-          closeWithAnim();
+          await closeWithAnim();
+          await widget.doneAnimation?.call();
+          resetWithAni(milisecond: 0);
+          widget.afterResetAnimation?.call();
         } else {
           resetWithAni();
         }
       } else if (whenLeadingActionShowing) {
         if (currentOffset.dx < maxLeadingPullWidth * .3) {
-          closeWithAnim();
+          await closeWithAnim();
+          await widget.doneAnimation?.call();
+          resetWithAni(milisecond: 0);
+          widget.afterResetAnimation?.call();
         } else {
           _open(trailing: false);
         }
@@ -659,40 +675,6 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
         });
 
       controller.duration = Duration(milliseconds: widget.closeAnimationDuration);
-      return controller.forward()
-        ..whenCompleteOrCancel(() {
-          ignoreActionButtonHit = false;
-        });
-    }
-  }
-
-  /// close this cell and return the [Future] of the animation
-  Future<void> opacityWithAnim() async {
-    //when close animation is running,ignore action button hit test
-    ignoreActionButtonHit = true;
-    _resetAnimValue();
-    if (mounted) {
-      Animation<double> animation = Tween<double>(begin: 0, end: 1).animate(opacityCurvedAnim);
-
-      controller.duration = Duration(milliseconds: 300);
-      return controller.forward()
-        ..whenCompleteOrCancel(() {
-          ignoreActionButtonHit = false;
-          resetWithAni(milisecond: 0);
-          resetopacityWithAnim();
-        });
-    }
-  }
-
-  /// close this cell and return the [Future] of the animation
-  Future<void> resetopacityWithAnim() async {
-    //when close animation is running,ignore action button hit test
-    ignoreActionButtonHit = true;
-    _resetAnimValue();
-    if (mounted) {
-      animation = Tween<double>(begin: 1, end: 0).animate(opacityCurvedAnim);
-
-      controller.duration = Duration(milliseconds: 0);
       return controller.forward()
         ..whenCompleteOrCancel(() {
           ignoreActionButtonHit = false;
@@ -792,8 +774,8 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
             ..onEnd = _onHorizontalDragEnd
             ..gestureSettings = gestureSettings
             ..isActionShowing = whenTrailingActionShowing || whenLeadingActionShowing
-            ..canDragToLeft = hasTrailingAction
-            ..canDragToRight = hasLeadingAction;
+            ..canDragToLeft = widget.canDragToLeft ?? true
+            ..canDragToRight = widget.canDragToRight ?? true;
         }),
     };
   }
@@ -811,21 +793,9 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
     whenTrailingActionShowing = currentOffset.dx < 0;
     whenLeadingActionShowing = currentOffset.dx > 0;
 
-    final Widget selectedButton = widget.controller != null && (widget.controller!.isEditing.value || editController.isAnimating)
-        ? _buildSelectedButton(selected)
-        : const SizedBox();
-
     final Widget content = Transform.translate(
       offset: editing && !editController.isAnimating ? Offset(widget.editModeOffset, 0) : currentOffset,
       transformHitTests: false,
-      child: SizedBox(
-        width: double.infinity,
-        child: IgnorePointer(ignoring: editController.isAnimating || editing || currentOffset.dx.abs() > 20, child: widget.child),
-      ),
-    );
-
-    final Widget content2 = FadeTransition(
-      opacity: opacityCurvedAnim,
       child: SizedBox(
         width: double.infinity,
         child: IgnorePointer(ignoring: editController.isAnimating || editing || currentOffset.dx.abs() > 20, child: widget.child),
@@ -849,22 +819,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   width = constraints.maxWidth;
-                  // Action buttons
-                  final bool shouldHideActionButtons = currentOffset.dx == 0.0 || editController.isAnimating || editing;
-                  final Widget trailing = shouldHideActionButtons ? const SizedBox() : _buildTrailingActionButtons();
-
-                  final Widget leading = shouldHideActionButtons ? const SizedBox() : _buildLeadingActionButtons();
-                  return Stack(
-                    alignment: Alignment.centerLeft,
-                    children: <Widget>[
-                      selectedButton,
-                              content2,
-                      content,
-              
-                      // trailing,
-                      // leading,
-                    ],
-                  );
+                  return content;
                 },
               ),
             ),

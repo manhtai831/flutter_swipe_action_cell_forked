@@ -1,3 +1,4 @@
+import 'package:example/item_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
@@ -175,51 +176,6 @@ class _SwipeActionPageState extends State<SwipeActionPage> {
   }
 
   Widget _item(BuildContext ctx, int index) {
-    return Stack(
-      children: [
-        Container(
-          color: Colors.green,
-          child: Image.network(
-              'https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg'),
-        ),
-        SwipeActionCell(
-          controller: controller,
-          index: index,
-backgroundColor: Colors.transparent,
-          // Required!
-          key: ValueKey(list[index]),
-
-          // Animation default value below
-          // deleteAnimationDuration: 400,
-          selectedForegroundColor: Colors.black.withAlpha(30),
-          trailingActions: [
-            SwipeAction(
-                title: "delete",
-                performsFirstActionWithFullSwipe: true,
-                forceAlignmentToBoundary: true,
-                nestedAction: SwipeNestedAction(title: "confirm"),
-                color: Colors.transparent,
-                onTap: (handler) async {
-                  await handler(false);
-
-                  setState(() {});
-                }),
-          ],
-firstActionWillCoverAllSpaceOnDeleting: true,
-          child: Container(
-            color: Colors.white,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context, CupertinoPageRoute(builder: (ctx) => const HomePage()));
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text("This is index of ${list[index]}", style: const TextStyle(fontSize: 30)),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+    return ItemView(item: list[index],controller: controller,);
   }
 }
