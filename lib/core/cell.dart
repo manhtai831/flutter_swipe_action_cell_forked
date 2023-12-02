@@ -509,7 +509,6 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
     }
 
     modifyOffsetIfOverScrolled();
-    print('currentOffset: ${currentOffset.dx}');
     setState(() {});
   }
 

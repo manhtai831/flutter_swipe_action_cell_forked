@@ -1,3 +1,5 @@
+## [3.1.5]
+- Update package hide trailing or leading when end animation
 ## [3.1.4]
 - Forked and rechange to private use 
 ## [3.1.3] Fix action width when screen rotating. 适配横竖屏切换
