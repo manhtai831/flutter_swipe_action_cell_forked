@@ -121,6 +121,7 @@ class SwipeActionCell extends StatefulWidget {
   final Future<void> Function()? afterResetAnimation;
   final bool? canDragToLeft;
   final bool? canDragToRight;
+  final double? maxWidthAnimation;
 
   /// ## About [key] / 关于[key]
   /// You should put a key,like [ValueKey] or [ObjectKey]
@@ -136,6 +137,7 @@ class SwipeActionCell extends StatefulWidget {
     required Key key,
     required this.child,
     this.trailingActions,
+    this.maxWidthAnimation,
     this.afterResetAnimation,
     this.canDragToLeft,
     this.canDragToRight,
@@ -599,9 +601,10 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
       //   }
       //   return;
       // }
+      double widthAnimation = widget.maxWidthAnimation ?? (width * .3);
 
       if (whenTrailingActionShowing) {
-        if (-currentOffset.dx > width * .3) {
+        if (-currentOffset.dx > widthAnimation) {
           await closeWithAnim();
           await widget.doneAnimation?.call();
           resetWithAni(milisecond: 0);
@@ -610,13 +613,13 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
           resetWithAni();
         }
       } else if (whenLeadingActionShowing) {
-        if (currentOffset.dx < maxLeadingPullWidth * .3) {
-          await closeWithAnim();
+        if (currentOffset.dx > widthAnimation) {
+          await closeWithAnim(end: width);
           await widget.doneAnimation?.call();
           resetWithAni(milisecond: 0);
           widget.afterResetAnimation?.call();
         } else {
-          _open(trailing: false);
+          resetWithAni();
         }
       }
 
@@ -662,12 +665,12 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
   }
 
   /// close this cell and return the [Future] of the animation
-  Future<void> closeWithAnim() async {
+  Future<void> closeWithAnim({double? end}) async {
     //when close animation is running,ignore action button hit test
     ignoreActionButtonHit = true;
     _resetAnimValue();
     if (mounted) {
-      animation = Tween<double>(begin: currentOffset.dx, end: -width).animate(closeCurvedAnim)
+      animation = Tween<double>(begin: currentOffset.dx, end: end ?? -width).animate(closeCurvedAnim)
         ..addListener(() {
           if (lockAnim) return;
           this.currentOffset = Offset(animation.value, 0);

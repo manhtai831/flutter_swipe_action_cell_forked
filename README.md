@@ -1,20 +1,18 @@
-### Language:
-
-[English](https://github.com/luckysmg/flutter_swipe_action_cell_forked/blob/master/README.md)
-| [中文简体](https://github.com/luckysmg/flutter_swipe_action_cell_forked/blob/master/README-CN.md)
 
 # flutter_swipe_action_cell_forked
 
 A package that can give you a cell that can be swiped, effect is like iOS native
+
+**Package forked from [flutter_swipe_action_cell](https://pub.dev/packages/flutter_swipe_action_cell)**
 
 ### If you like this package, you can give me a star😀. The more stars this project has, the more time I will speant in the project😀
 
 
 ### Donate:
 
-Alipay | Wechat | 
--------- | -----
-<img src="https://raw.githubusercontent.com/luckysmg/daily_images/main/flutter_swipe_action_cell_forked_images/alipay.JPG?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/wechat.JPG?raw=true" width="250"  alt=""/>
+- MOMO
+
+<img src="./msg-1002079903244-2.jpg" width="250"  alt=""/> 
 
 
 ## Get started
@@ -26,406 +24,218 @@ Alipay | Wechat |
 ##### install:
 
 ```yaml
-flutter_swipe_action_cell_forked: ^3.1.3
+flutter_swipe_action_cell_forked: ^3.1.4
 ```  
 
-## 1.Preview：
+![Alt text](ezgif.com-video-to-gif.gif)
 
-Simple delete  | Perform first action when full swipe | 
--------- | -----
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/1.gif?raw=true" width="250"  alt=""/> |<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/2.gif?raw=true" width="250"  alt=""/>
-
-Delete with animation | More than one action | 
--------- | -----
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/3.gif?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/4.gif?raw=true" width="250"  alt=""/>
-
-Effect like WeChat(confirm delete) | Automatically adjust the button width
--------- | -----
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/6.gif?raw=true" width="250"  alt=""/> | <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/7.gif?raw=true" width="250"  alt=""/>
-
-Effect like WeChat collection Page: Customize your button shape | 
--------- |
-
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/9.gif?raw=true" width="300"  alt=""/>
-
-With leading Action and trailing action | 
--------- |
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/10.gif?raw=true" width="300"  alt=""/> |
-
-Edit mode | 
--------- |
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/8.gif?raw=true" width="200"  alt=""/> |
-
-## Full example:
-
-[Preview (YouTobe video)](https://youtu.be/LWuHas8Zspw)
-
-And you can find full example code in [example page](https://pub.dev/packages/flutter_swipe_action_cell_forked/example)
-
-## Examples
-
-- ## Example 1: Simple delete the item in ListView
-
- <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/1.gif?raw=true" width="250"  alt=""/>
-
-- #### Tip: put the code in the itemBuilder of your ListView
+Example:
 
 ```dart
- SwipeActionCell(
-      key: ObjectKey(list[index]), /// this key is necessary
-      trailingActions: <SwipeAction>[
-        SwipeAction(
-            title: "delete",
-            onTap: (CompletionHandler handler) async {
-              list.removeAt(index);
-              setState(() {});
-            },
-            color: Colors.red),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("this is index of ${list[index]}",
-            style: TextStyle(fontSize: 40)),
-      ),
-    );
-```
 
-- ## Example 2: Perform first action when full swipe
+class ItemView extends StatefulWidget {
+  const ItemView({Key? key, this.item, this.controller}) : super(key: key);
+  final Model? item;
+  final SwipeActionController? controller;
+  @override
+  State<ItemView> createState() => _ItemViewState();
+}
 
-  <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/2.gif?raw=true" width="250"  alt=""/>
+class _ItemViewState extends State<ItemView> with TickerProviderStateMixin {
+  late Animation<double> animation;
+  late AnimationController controller;
 
- ```dart
- SwipeActionCell(
-       /// this key is necessary
-       key: ObjectKey(list[index]),
-       trailingActions: <SwipeAction>[
-         SwipeAction(
-             /// this is the same as iOS native
-             performsFirstActionWithFullSwipe: true,
-             title: "delete",
-             onTap: (CompletionHandler handler) async {
-               list.removeAt(index);
-               setState(() {});
-             },
-             color: Colors.red),
-       ],
-       child: Padding(
-         padding: const EdgeInsets.all(8.0),
-         child: Text("this is index of ${list[index]}",
-             style: TextStyle(fontSize: 40)),
-       ),
-     );
- ```
-
-- ## Example 3: Delete with animation
-
-   <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/3.gif?raw=true" width="250"  alt=""/>
-
- ```dart
-SwipeActionCell(
-      key: ObjectKey(list[index]),
-      trailingActions: <SwipeAction>[
-        SwipeAction(
-            title: "delete",
-            onTap: (CompletionHandler handler) async {
-              
-              /// await handler(true) : will delete this row
-              /// And after delete animation,setState will called to 
-              /// sync your data source with your UI
-
-              await handler(true);
-              list.removeAt(index);
-              setState(() {});
-            },
-            color: Colors.red),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("this is index of ${list[index]}",
-            style: TextStyle(fontSize: 40)),
-      ),
-    );
- ```
-
-  - ## Example 4: More than one action: 
- 
-  
-   <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/4.gif?raw=true" width="250"  alt=""/>
-
- ```dart
-SwipeActionCell(
-      key: ObjectKey(list[index]),
-      trailingActions: <SwipeAction>[
-        SwipeAction(
-            title: "delete",
-            onTap: (CompletionHandler handler) async {
-              await handler(true);
-              list.removeAt(index);
-              setState(() {});
-            },
-            color: Colors.red),
-
-        SwipeAction(
-            widthSpace: 120,
-            title: "popAlert",
-            onTap: (CompletionHandler handler) async {
-              /// false means that you just do nothing,it will close
-              /// action buttons by default
-              handler(false);
-              showCupertinoDialog(
-                  context: context,
-                  builder: (c) {
-                    return CupertinoAlertDialog(
-                      title: Text('ok'),
-                      actions: <Widget>[
-                        CupertinoDialogAction(
-                          child: Text('confirm'),
-                          isDestructiveAction: true,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  });
-            },
-            color: Colors.orange),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-            "this is index of ${list[index]}",
-            style: TextStyle(fontSize: 40)),
-      ),
-    );
- ```
-
-- ## Example 5:Delete like WeChat message page(need to confirm it:
-
-   <img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/6.gif?raw=true" width="250"  alt=""/>
-
-```dart
-return SwipeActionCell(
-      key: ValueKey(list[index]),
-      trailingActions: <SwipeAction>[
-        SwipeAction(
-          ///
-          /// This attr should be passed to first action
-          ///
-          nestedAction: SwipeNestedAction(title: "确认删除"),
-          title: "删除",
-          onTap: (CompletionHandler handler) async {
-            await handler(true);
-            list.removeAt(index);
-            setState(() {});
-          },
-          color: Colors.red,
-        ),
-        SwipeAction(
-            title: "置顶",
-            onTap: (CompletionHandler handler) async {
-              /// false means that you just do nothing,it will close
-              /// action buttons by default
-              handler(false);
-            },
-            color: Colors.grey),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text("this is index of ${list[index]}",
-            style: TextStyle(fontSize: 40)),
-      ),
-    );
-```
-
-- ## Example 6：Edit mode（just like iOS native effect）
-
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/8.gif?raw=true" width="200"  alt=""/>
-
-```dart
-/// To controller edit mode
-SwipeActionEditController controller;
-
-/// 在initState
-@override
+  @override
   void initState() {
     super.initState();
-    controller = SwipeActionController();
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+      value: 0.0,
+    );
+    animation = Tween<double>(begin: 0, end: 1).animate(controller);
   }
-/// To get the selected rows index
-List<int> selectedIndexes = controller.getSelectedIndexes();
 
+  Future<void> onDoneAnimation() async {
+    await controller.forward();
+  }
 
-/// open cell
-controller.openCellAt(index: 2, trailing: true, animated: true);
+  Future<void> onResetAnimation() async {
+    controller.reverse();
+  }
 
-/// close cell
-controller.closeAllOpenCell();
-
-/// toggleEditingMode
-controller.toggleEditingMode()
-
-/// startEditMode
-controller.startEditingMode()
-
-/// stopEditMode
-controller.stopEditingMode()
-
-/// select cell
-controller.selectCellAt(indexPaths:[1,2,3])
-
-controller.deselectCellAt(indexPaths:[1,2,3])
-
-/// pass your data length to selectedAll
-controller.selectAll(30
-)
-
-/// deselect all cell
-controller deselectAll()
-
-ListView.builder(
-        itemBuilder: (c, index) {
-          return _item(index);
-        },
-        itemCount: list.length,
-      );
-
-
- Widget _item(int index) {
-     return SwipeActionCell(
-       /// controller
-       controller: controller,
-       /// index is required if you want to enter edit mode
-       index: index,
-       key: ValueKey(list[index]),
-       trailingActions: [
-         SwipeAction(
-             /// this is the same as iOS native
-             performsFirstActionWithFullSwipe: true,
-             onTap: (handler) async {
-               await handler(true);
-               list.removeAt(index);
-               setState(() {});
-             },
-             title: "delete"),
-       ],
-       child: Padding(
-         padding: const EdgeInsets.all(15.0),
-         child: Text("This is index of ${list[index]}",
-             style: TextStyle(fontSize: 35)),
-       ),
-     );
-   }
-
-```
-
-- ## Example 7：customize shape
-
-<img src="https://github.com/luckysmg/daily_images/blob/main/flutter_swipe_action_cell_forked_images/9.gif?raw=true" width="250"  alt=""/>
-
-```dart
-
-Widget _item(int index) {
-    return SwipeActionCell(
-      key: ValueKey(list[index]),
-      trailingActions: [
-        SwipeAction(
-            nestedAction: SwipeNestedAction(
-              /// customize your nested action content
-              content: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.red,
-                ),
-                width: 130,
-                height: 60,
-                child: OverflowBox(
-                  maxWidth: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                      Text('确认删除',
-                          style: TextStyle(color: Colors.white, fontSize: 20)),
-                    ],
-                  ),
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return Stack(
+      children: [
+        Container(
+          width: width,
+          height: 80,
+          decoration: BoxDecoration(color: Colors.red),
+          child: Row(
+            children: [
+              Expanded(child: Text('Texxt nay hienj ra khi sur dung cu chi')),
+              Spacer(),
+              Expanded(child: Text('Texxt nay hienj ra khi sur dung cu chi')),
+            ],
+          ),
+        ),
+        FadeTransition(
+            opacity: animation,
+            child: Container(
+              width: width,
+              color: Colors.white,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context, CupertinoPageRoute(builder: (ctx) => const HomePage()));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text("This is index of ${widget.item?.index}", style: const TextStyle(fontSize: 30)),
                 ),
               ),
+            )),
+        SwipeActionCell(
+          controller: widget.controller,
+          index: widget.item?.index,
+          backgroundColor: Colors.transparent,
+          key: ValueKey(widget.item),
+          doneAnimation: onDoneAnimation,
+          afterResetAnimation: onResetAnimation,
+          trailingActions: [SwipeAction(onTap: (v) {}, performsFirstActionWithFullSwipe: true)],
+          leadingActions: [SwipeAction(onTap: (v) {}, performsFirstActionWithFullSwipe: true)],
+          child: Container(
+            color: Colors.white,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context, CupertinoPageRoute(builder: (ctx) => const HomePage()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text("This is index of ${widget.item?.index}", style: const TextStyle(fontSize: 30)),
+              ),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+```
 
-            /// you should set the default  bg color to transparent
-            color: Colors.transparent,
+```dart
+class _SwipeActionPageState extends State<SwipeActionPage> {
+  List<Model> list = List.generate(30, (index) {
+    return Model()..index = index;
+  });
 
-            /// set content instead of title of icon
-            content: _getIconButton(Colors.red, Icons.delete),
-            onTap: (handler) async {
-              list.removeAt(index);
+  late SwipeActionController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = SwipeActionController(selectedIndexPathsChangeCallback: (changedIndexPaths, selected, currentCount) {
+      print('cell at ${changedIndexPaths.toString()} is/are ${selected ? 'selected' : 'unselected'} ,current selected count is $currentCount');
+
+      /// I just call setState() to update simply in this example.
+      /// But the whole page will be rebuilt.
+      /// So when you are developing,you'd better update a little piece
+      /// of UI sub tree for best performance....
+
+      setState(() {});
+    });
+  }
+
+  Widget bottomBar() {
+    return Container(
+      color: Colors.grey[200],
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: CupertinoButton.filled(
+                  padding: const EdgeInsets.only(),
+                  child: const Text('open cell at 2'),
+                  onPressed: () {
+                    controller.openCellAt(index: 2, trailing: true, animated: true);
+                  }),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: CupertinoButton.filled(
+                  padding: const EdgeInsets.only(),
+                  child: const Text('switch edit mode'),
+                  onPressed: () {
+                    controller.toggleEditingMode();
+                  }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: bottomBar(),
+      appBar: CupertinoNavigationBar(
+        middle: CupertinoButton.filled(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            minSize: 0,
+            child: const Text('deselect all', style: TextStyle(fontSize: 22)),
+            onPressed: () {
+              controller.deselectAll();
+            }),
+        leading: CupertinoButton.filled(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+            minSize: 0,
+            child: Text('delete cells (${controller.getSelectedIndexPaths().length})', style: const TextStyle(color: Colors.white)),
+            onPressed: () {
+              /// 获取选取的索引集合
+              List<int> selectedIndexes = controller.getSelectedIndexPaths();
+
+              List<String> idList = [];
+              for (var element in selectedIndexes) {
+                idList.add(list[element].id);
+              }
+
+              /// 遍历id集合，并且在原来的list中删除这些id所对应的数据
+              for (var itemId in idList) {
+                list.removeWhere((element) {
+                  return element.id == itemId;
+                });
+              }
+
+              /// 更新内部数据，这句话一定要写哦
+              controller.deleteCellAt(indexPaths: selectedIndexes);
               setState(() {});
             }),
-        SwipeAction(
-            content: _getIconButton(Colors.grey, Icons.vertical_align_top),
-            color: Colors.transparent,
-            onTap: (handler) {}),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Text(
-            "This is index of ${list[index]},Awesome Swipe Action Cell!! I like it very much!",
-            style: TextStyle(fontSize: 25)),
+        trailing: CupertinoButton.filled(
+            minSize: 0,
+            padding: const EdgeInsets.all(10),
+            child: const Text('select all'),
+            onPressed: () {
+              controller.selectAll(dataLength: list.length);
+            }),
+      ),
+      body: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          return _item(context, index);
+        },
       ),
     );
   }
 
-  Widget _getIconButton(color, icon) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-
-        /// set you real bg color in your content
-        color: color,
-      ),
-      child: Icon(
-        icon,
-        color: Colors.white,
-      ),
-    );
+  Widget _item(BuildContext ctx, int index) {
+    return ItemView(item: list[index],controller: controller,);
   }
-
+}
 ```
-
-
-- ## Example 8：Close opening cell when navigator change its routes.
-Add a `SwipeActionNavigatorObserver` in `MaterialApp`'s `navigatorObservers`
-```dart
-return MaterialApp(
-  navigatorObservers: [SwipeActionNavigatorObserver()],
-  ....
-);
-
-```
-
-# About CompletionHandler in onTap function of SwipeAction
-
-it means how you want control this cell after you tap it. If you don't want any animation, just don't call it and update
-your data and UI with setState()
-
-If you want some animation:
-
-- handler(true) : Means this row will be deleted(You should call setState after it)
-
-- await handler(true) : Means that you will await the animation to complete(you should call setState after it so that
-  you will get an animation)
-
-- handler(false) : means it will not delete this row.By default, it just close this cell's action buttons.
-
-- await handler(false) : means it will wait the close animation to complete.
-
-# About all parameter:
-
-I wrote them in my code with dart doc comments. You can read them in source code.
-
