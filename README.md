@@ -12,7 +12,7 @@ A package that can give you a cell that can be swiped, effect is like iOS native
 
 - MOMO
 
-<img src="./msg-1002079903244-2.jpg" width="250"  alt=""/> 
+<img src="./msg-1002079903244-2.png" width="250"  alt=""/> 
 
 
 ## Get started
@@ -27,7 +27,8 @@ A package that can give you a cell that can be swiped, effect is like iOS native
 flutter_swipe_action_cell_forked: ^3.1.4
 ```  
 
-![Alt text](ezgif.com-video-to-gif.gif)
+<img src="./ezgif.com-video-to-gif.gif" width="250"  alt=""/> 
+
 
 Example:
 

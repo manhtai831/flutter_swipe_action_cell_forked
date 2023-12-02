@@ -73,6 +73,7 @@ class _ItemViewState extends State<ItemView> with TickerProviderStateMixin {
             SwipeAction(
               onTap: (v) {},
               performsFirstActionWithFullSwipe: true,
+              color: Colors.transparent,
               content: SizedBox(
                 width: 112,
                 child: Text('this content show when use gesture',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
@@ -82,6 +83,7 @@ class _ItemViewState extends State<ItemView> with TickerProviderStateMixin {
           leadingActions: [
             SwipeAction(
                 onTap: (v) {},
+                color: Colors.transparent,
                 performsFirstActionWithFullSwipe: true,
                 content: SizedBox(
                   width: 112,

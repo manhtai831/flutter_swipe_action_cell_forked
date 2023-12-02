@@ -828,7 +828,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
                 builder: (BuildContext context, BoxConstraints constraints) {
                   width = constraints.maxWidth;
                    final bool shouldHideActionButtons =
-                      currentOffset.dx == 0.0 || editController.isAnimating || editing;
+                      currentOffset.dx == 0.0 || editController.isAnimating || editing || currentOffset.dx == width;
                   final Widget trailing = shouldHideActionButtons
                       ? const SizedBox()
                       : _buildTrailingActionButtons();
