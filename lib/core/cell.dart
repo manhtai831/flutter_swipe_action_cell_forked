@@ -7,9 +7,6 @@ import 'package:flutter/services.dart';
 import 'controller.dart';
 import 'events.dart';
 import 'store.dart';
-import 'swipe_data.dart';
-import 'swipe_pull_align_button.dart';
-import 'swipe_pull_button.dart';
 
 ///
 /// @created by 文景睿
@@ -832,79 +829,7 @@ class SwipeActionCellState extends State<SwipeActionCell> with TickerProviderSta
     );
   }
 
-  Widget _buildSelectedButton(bool selected) {
-    return Container(
-      alignment: Alignment.center,
-      width: widget.editModeOffset,
-      child: selected ? widget.selectedIndicator : widget.unselectedIndicator,
-    );
-  }
 
-  Widget _buildLeadingActionButtons() {
-    if (currentOffset.dx < 0 || !hasLeadingAction) {
-      return const SizedBox();
-    }
-    final List<Widget> actionButtons = List.generate(leadingActionsCount, (index) {
-      final actualIndex = leadingActionsCount - 1 - index;
-      if (widget.leadingActions!.length == 1 &&
-          !widget.leadingActions![0].forceAlignmentToBoundary &&
-          widget.leadingActions![0].performsFirstActionWithFullSwipe) {
-        return SwipePullAlignButton(actionIndex: actualIndex, trailing: false);
-      } else {
-        return SwipePullButton(actionIndex: actualIndex, trailing: false);
-      }
-    });
-
-    return SwipeData(
-      willPull: lastItemOut && widget.leadingActions![0].performsFirstActionWithFullSwipe,
-      firstActionWillCoverAllSpaceOnDeleting: widget.firstActionWillCoverAllSpaceOnDeleting,
-      parentKey: widget.key!,
-      totalActionWidth: maxLeadingPullWidth,
-      actions: widget.leadingActions!,
-      contentWidth: width,
-      currentOffset: currentOffset.dx,
-      fullDraggable: widget.leadingActions![0].performsFirstActionWithFullSwipe,
-      parentState: this,
-      child: Positioned.fill(
-        child: Stack(
-          children: actionButtons,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTrailingActionButtons() {
-    if (currentOffset.dx > 0 || !hasTrailingAction) {
-      return const SizedBox();
-    }
-    final List<Widget> actionButtons = List.generate(trailingActionsCount, (index) {
-      final actualIndex = trailingActionsCount - 1 - index;
-      if (trailingActionsCount == 1 &&
-          !widget.trailingActions![0].forceAlignmentToBoundary &&
-          widget.trailingActions![0].performsFirstActionWithFullSwipe) {
-        return SwipePullAlignButton(actionIndex: actualIndex, trailing: true);
-      } else {
-        return SwipePullButton(actionIndex: actualIndex, trailing: true);
-      }
-    });
-
-    return SwipeData(
-      willPull: lastItemOut && widget.trailingActions![0].performsFirstActionWithFullSwipe,
-      firstActionWillCoverAllSpaceOnDeleting: widget.firstActionWillCoverAllSpaceOnDeleting,
-      parentKey: widget.key!,
-      totalActionWidth: maxTrailingPullWidth,
-      actions: widget.trailingActions!,
-      contentWidth: width,
-      currentOffset: currentOffset.dx,
-      fullDraggable: widget.trailingActions![0].performsFirstActionWithFullSwipe,
-      parentState: this,
-      child: Positioned.fill(
-        child: Stack(
-          children: actionButtons,
-        ),
-      ),
-    );
-  }
 }
 
 /// If you want the animation I support
